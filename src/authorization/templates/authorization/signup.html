@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<br><br><br>
+<form action="" method="post">
+
+    {{ form.csrf_token() }}
+    {% for item in form if item.id != 'csrf_token' and item.type != 'SubmitField' %}
+    {{ item.label }}
+    {{ item }}
+    {% for error in item.errors %}
+    {{ error }}
+    {% endfor %}
+    <br><br>
+    {% endfor %}
+    <br><br>
+    {{ form.submit }}
+
+</form>
+
+{% endblock %}
