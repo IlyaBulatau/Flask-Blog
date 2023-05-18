@@ -23,6 +23,9 @@ class DeveloperConfig(BaseConfig):
     SQLALCHEMY_ECHO = 1
     TEMPLATES_AUTO_RELOAD = True
     EXPLAIN_TEMPLATE_LOADING = True
+    CKEDITOR_HEIGHT = 200
+    CKEDITOR_WIDTH = 750
+    CKEDITOR_PKG_TYPE = 'basic'
 
 class ProductConfig(BaseConfig):
     DEBUG = 0

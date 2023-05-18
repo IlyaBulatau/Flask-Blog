@@ -9,6 +9,7 @@ authorization = Blueprint('authorization', __name__, template_folder='templates'
 
 login_manager = LoginManager()
 
+
 @login_manager.user_loader
 def load_user(id):
     return models.User.query.get(int(id))
@@ -43,7 +44,12 @@ def signup():
             email = form.email.data
             password = form.password.data
             
-            user = models.User(username=username, email=email, password=password)
+            user = models.User(
+                username=username,
+                email=email,
+                password=password
+                )
+            
             models.db.session.add(user)
             models.db.session.commit()
             

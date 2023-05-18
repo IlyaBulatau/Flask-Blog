@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Post: {{ title }}</h1>
+
+<form action="" method="post">
+{{ form.csrf_token() }}
+
+{{ form.text.label }}
+{{ form.text() }}
+
+{% for error in form.text.errors %}
+{{ error }}
+{% endfor %}
+
+{{ form.save }}
+{{ form.cancel }}
+
+{{ ckeditor.load() }}
+{{ ckeditor.config(name='text') }}
+</form>
+{% endblock %}

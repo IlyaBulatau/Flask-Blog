@@ -2,11 +2,10 @@
 
 {% block content %}
 
-<br><br><br>
 <form action="" method="post">
 
     {{ form.csrf_token() }}
-    {% for item in form if item.id != 'csrf_token' and item.type != 'SubmitField' %}
+    {% for item in form if item.name != 'csrf_token' and item.name != 'submit'  %}
     {{ item.label }}
     {{ item }}
     {% for error in item.errors %}
@@ -14,10 +13,9 @@
     {% endfor %}
     <br><br>
     {% endfor %}
-    <br><br>
     {{ form.submit }}
+
 
 </form>
 
 {% endblock %}
-
