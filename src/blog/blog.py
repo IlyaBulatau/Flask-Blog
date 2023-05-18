@@ -45,11 +45,13 @@ def show_post(title):
     return render_template('blog/show_post.html', post=post)
 
 @blog.route('/mypost')
+@login_required
 def my_post():
-    posts = models.Post.query.order_by(models.Post.id.desc()).filter(models.Post.user_id == current_user.id)
+    posts = models.Post.query.order_by(models.Post.id.desc()).filter(models.Post.user_id == current_user.id).all()
     return render_template('blog/mypost.html', posts=posts)
 
 @blog.route('/<string:title>/change', methods=['GET', 'POST'])
+@login_required
 def change_post(title):
     post = models.Post.query.filter(models.Post.title == title).first()
     form = PostChangeForm(text=post.text)
@@ -64,3 +66,12 @@ def change_post(title):
 
         return redirect(url_for('.my_post'))
     return render_template('blog/change_post.html', form=form, title=title)
+
+@blog.route('<string:title>/delete')
+@login_required
+def del_post(title):
+    post = models.Post.query.filter(models.Post.title == title).first()
+    
+    models.db.session.delete(post)
+    models.db.session.commit()
+    return redirect(url_for('.my_post'))
