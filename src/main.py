@@ -7,7 +7,8 @@ from database import models
 from config import DeveloperConfig
 from log.log import log
 from authorization.authorization import authorization, login_manager
-from blog.blog import blog, redis
+from blog.blog import blog
+from blog.redis import redis
 
 
 app = Flask(__name__)
@@ -37,6 +38,5 @@ if __name__ == "__main__":
     app.run()
 
 #TODO - сделать возможность удаления постов c alert окном
-# Тролитинг на создание постов (нельзя постить условно каждый час)
 # Возможность оставлять коменты
 # Обработка ошибок

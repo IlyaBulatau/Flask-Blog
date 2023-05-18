@@ -19,10 +19,13 @@ class BaseConfig:
 
 class DeveloperConfig(BaseConfig):
     DEBUG = 1
+    
     SQLALCHEMY_DATABASE_URI = f'postgresql+psycopg2://{BaseConfig.DB_LOGIN}:{BaseConfig.DB_PASSWORD}@localhost/{BaseConfig.DB_NAME}'
     SQLALCHEMY_ECHO = 1
+
     TEMPLATES_AUTO_RELOAD = True
     EXPLAIN_TEMPLATE_LOADING = True
+
     CKEDITOR_HEIGHT = 200
     CKEDITOR_WIDTH = 750
     CKEDITOR_PKG_TYPE = 'basic'
