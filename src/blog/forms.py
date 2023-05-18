@@ -8,7 +8,7 @@ class ValidatorSwearInText:
 
     def __call__(self, form, field):
         ...
-
+                
 
 class PostAddForm(FlaskForm):
     title = StringField(label='Title', validators=[InputRequired(), Length(min=8, max=100)])

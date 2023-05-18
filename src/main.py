@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect, flash
+from flask import Flask, render_template
 from flask_migrate import Migrate
 from flask_login import current_user
 from flask_ckeditor import CKEditor
@@ -7,12 +7,12 @@ from database import models
 from config import DeveloperConfig
 from log.log import log
 from authorization.authorization import authorization, login_manager
-from blog.blog import blog
+from blog.blog import blog, redis
 
 
 app = Flask(__name__)
 app.config.from_object(DeveloperConfig())
-
+app.redis = redis
 app.register_blueprint(authorization, url_prefix='/authorization')
 app.register_blueprint(blog, url_prefix='/blog')
 

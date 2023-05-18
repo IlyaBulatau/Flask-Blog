@@ -1,6 +1,9 @@
 from flask import Blueprint, request, render_template, redirect, url_for
 from flask_login import current_user
 from flask_login import login_required
+from redis import Redis
+
+from datetime import timedelta
 
 from blog.forms import PostAddForm, PostChangeForm
 from database import models
@@ -9,6 +12,7 @@ from log.log import log
 from blog.service import replace_tag_in_text
 
 blog = Blueprint('blog', __name__, template_folder='templates')
+redis = Redis.from_url(url='redis://')
 
 @blog.route('/add_post', methods=['GET', 'POST'])
 @login_required
@@ -25,7 +29,7 @@ def add_post():
                 text=text,
                 user_id=user_id
             )
-
+            redis.set(current_user.id, current_user.id, ex=timedelta(days=constant.LIMIT_POST))
             models.db.session.add(post)
             models.db.session.commit()
             return redirect(url_for('index'))
