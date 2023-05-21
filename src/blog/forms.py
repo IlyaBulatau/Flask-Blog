@@ -7,7 +7,7 @@ from wtforms.validators import ValidationError
 from blog.redis import redis
 from flask_login import current_user
 from log.log import log
-from database.models import Post
+from database import models
 
 
 class ValidatorTitle:
@@ -16,9 +16,8 @@ class ValidatorTitle:
     Дл того что бы названия постов были уникальными
     """
     def __call__(self, form, field):
-        for post in Post.query.all():
-            if field.data == post.title:
-                raise ValidationError('This title have in DB')
+        if models.db.session.query(models.Post).filter(models.Post.title == field.data).first():
+            raise ValidationError('This title have in DB')
 
 
 class ValidatorLimitAddPost:

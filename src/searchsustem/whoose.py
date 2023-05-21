@@ -7,6 +7,9 @@ class Schema(fields.SchemaClass):
 
 
 def full_text_search(search_text, available_text):
+    """
+    Функция ищет совпадения в тексте поста по тексту запроса
+    """
     ix = index.create_in('./whooshee', schema=Schema())
     with ix.writer() as w:
         w.add_document(text=available_text)

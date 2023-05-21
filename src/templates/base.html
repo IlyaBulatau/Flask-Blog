@@ -37,7 +37,7 @@
                 <a class="nav-link" href="{{ url_for('blog.view_posts', num=1) }}">View Posts</a>
               </li>
             </ul>
-            <form class="d-flex" role="search" method="GET" action="{{ url_for('searchsustem.search') }}">
+            <form class="d-flex" role="search" method="GET" action="{{ url_for('searchsustem.search', num=1) }}">
               <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="text">
               <button class="btn btn-outline-success" type="submit">Search</button>
             </form>

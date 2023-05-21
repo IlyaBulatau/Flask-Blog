@@ -2,12 +2,51 @@
 
 {% block content %}
 
-<h1>{{ text }}</h1>
-
+<h1>Search result for query: {{ text }}</h1>
+{% if posts %}
 {% for post in posts %}
-<h3>{{ post.title }}</h3>
-<p>{{ post.text }}</p>
-<br><br>
+
+<div class="card mb-3">
+    <a href="{{ url_for('blog.show_post', title=post.title) }}" style="text-decoration: none;">
+    <div class="card-body">
+      <h5 class="card-title" style="color: black;">{{ post.title }}</h5>
+      <p class="card-text" style="color: black;">{{ post.text[:200] }}...</p>
+      <p class="card-text"><small class="text-body-secondary">Post from {{ post.user.username }}</small></p>
+    </div>
+    </a>
+</div>
+<br>
 {% endfor %}
+<nav aria-label="Page navigation example">
+<ul class="pagination">
+    <li class="page-item">
+    {% if prev_page %}
+    <a class="page-link" href="{{ url_for('blog.view_posts', num=current_page-1) }}" aria-label="Previous">
+    <span aria-hidden="true">&laquo;</span>
+    {% endif %}
+        
+    </a>
+    </li>
+    {% for page in posts.iter_pages() %}
+    {% if page == current_page %}
+    <li class="page-item active" aria-current="page">
+        <a class="page-link" href="#">{{ page }}</a>
+    </li>
+    {% else %}    
+    <li class="page-item"><a class="page-link" href="{{ url_for('.view_posts', num=page) }}">{{ page }}</a></li>
+    {% endif %}
+    {% endfor %}
+    <li class="page-item">
+    {% if next_page %}
+    <a class="page-link" href="{{ url_for('.view_posts', num=page+1) }}" aria-label="Next">
+    <span aria-hidden="true">&raquo;</span>
+    {% endif %}
+    </a>
+    </li>
+</ul>
+</nav>
+{% else %}
+<h3>Not Result</h3>
+{% endif %}
 
 {% endblock %}
