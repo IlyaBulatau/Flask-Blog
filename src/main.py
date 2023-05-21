@@ -9,6 +9,7 @@ from log.log import log
 from authorization.authorization import authorization, login_manager
 from blog.blog import blog
 from blog.redis import redis
+from searchsustem.searchsustem import searchsustem
 
 
 app = Flask(__name__)
@@ -16,6 +17,7 @@ app.config.from_object(DeveloperConfig())
 app.redis = redis
 app.register_blueprint(authorization, url_prefix='/authorization')
 app.register_blueprint(blog, url_prefix='/blog')
+app.register_blueprint(searchsustem, url_prefix='/search')
 
 models.db.init_app(app)
 login_manager.init_app(app)
@@ -37,6 +39,8 @@ if __name__ == "__main__":
         models.db.create_all()
     app.run()
 
-#TODO - сделать возможность удаления постов c alert окном
+#TODO - 
 # Возможность оставлять коменты
 # Обработка ошибок
+# Поиск постов
+# настроить логгирование

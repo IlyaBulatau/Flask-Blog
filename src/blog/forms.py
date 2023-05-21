@@ -7,12 +7,19 @@ from wtforms.validators import ValidationError
 from blog.redis import redis
 from flask_login import current_user
 from log.log import log
+from database.models import Post
 
 
-class ValidatorSwearInText:
-
+class ValidatorTitle:
+    """
+    Валидотор заголовков постов
+    Дл того что бы названия постов были уникальными
+    """
     def __call__(self, form, field):
-        ...
+        for post in Post.query.all():
+            if field.data == post.title:
+                raise ValidationError('This title have in DB')
+
 
 class ValidatorLimitAddPost:
     """
@@ -25,7 +32,7 @@ class ValidatorLimitAddPost:
             raise ValidationError('Posting limit 1 per day')
 
 class PostAddForm(FlaskForm):
-    title = StringField(label='Title', validators=[InputRequired(), Length(min=8, max=100)])
+    title = StringField(label='Title', validators=[InputRequired(), Length(min=8, max=100), ValidatorTitle()])
     text = TextAreaField(label='Content', validators=[InputRequired(), Length(min=255)])
     submit = SubmitField(validators=[ValidatorLimitAddPost()])
 
