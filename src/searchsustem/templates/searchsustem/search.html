@@ -21,7 +21,7 @@
 <ul class="pagination">
     <li class="page-item">
     {% if prev_page %}
-    <a class="page-link" href="{{ url_for('blog.view_posts', num=current_page-1) }}" aria-label="Previous">
+    <a class="page-link" href="{{ url_for('.search', num=current_page-1) }}" aria-label="Previous">
     <span aria-hidden="true">&laquo;</span>
     {% endif %}
         
@@ -33,12 +33,12 @@
         <a class="page-link" href="#">{{ page }}</a>
     </li>
     {% else %}    
-    <li class="page-item"><a class="page-link" href="{{ url_for('.view_posts', num=page) }}">{{ page }}</a></li>
+    <li class="page-item"><a class="page-link" href="{{ url_for('.search', num=page, text=text) }}">{{ page }}</a></li>
     {% endif %}
     {% endfor %}
     <li class="page-item">
     {% if next_page %}
-    <a class="page-link" href="{{ url_for('.view_posts', num=page+1) }}" aria-label="Next">
+    <a class="page-link" href="{{ url_for('.search', num=current_page+1, text=text) }}" aria-label="Next">
     <span aria-hidden="true">&raquo;</span>
     {% endif %}
     </a>

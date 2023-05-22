@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from flask_migrate import Migrate
 from flask_login import current_user
 from flask_ckeditor import CKEditor
+from flask_debugtoolbar import DebugToolbarExtension
 
 from database import models
 from config import DeveloperConfig
@@ -26,6 +27,8 @@ login_manager.login_view = 'authorization.login'
 migrate = Migrate(app, models.db)
 
 ckeditor = CKEditor(app)
+
+toolbar = DebugToolbarExtension(app)
 
 
 

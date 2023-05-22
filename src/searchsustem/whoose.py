@@ -1,28 +1,38 @@
 from whoosh import fields, index, qparser
+import os
 
 
 class Schema(fields.SchemaClass):
     text = fields.TEXT(stored=True, sortable=True)
 
-
-
-def full_text_search(search_text, available_text):
-    """
-    Функция ищет совпадения в тексте поста по тексту запроса
-    """
-    ix = index.create_in('./whooshee', schema=Schema())
-    with ix.writer() as w:
-        w.add_document(text=available_text)
         
-        ix = index.open_dir('./whooshee')
+class SearchText:
 
+    def __init__(self, search_text):
+        self.search_text = search_text
+        self.dirname = 'whooshee'
+        if not os.path.isdir(self.dirname):
+            os.mkdir('whooshee')
+        self.ix = index.create_in('./whooshee', schema=Schema())
+
+    def __call__(self, available_text):
+        with self.ix.writer() as writer:
+            writer.add_document(text=available_text)
         
-    with ix.searcher() as s:
-        qp = qparser.QueryParser('text', schema=ix.schema)
-        q = qp.parse(search_text)
-        res = s.search(q)
-        for item in res:
-            return (item['text'])
+        with self.ix.searcher() as search:
+            parser = qparser.QueryParser('text', schema=self.ix.schema).parse(self.search_text)
+            result = search.search(parser)
+            for item in result:
+                return item['text']
+            
+    def __len__(self):
+        text = self.__call__()
+        if text:
+            return text
+    
+    
+
+
 
 
 

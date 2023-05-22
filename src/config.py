@@ -19,6 +19,7 @@ class BaseConfig:
 
 class DeveloperConfig(BaseConfig):
     DEBUG = 1
+    FLASK_DDEBUG = 1
     
     SQLALCHEMY_DATABASE_URI = f'postgresql+psycopg2://{BaseConfig.DB_LOGIN}:{BaseConfig.DB_PASSWORD}@localhost/{BaseConfig.DB_NAME}'
     SQLALCHEMY_ECHO = 1
@@ -29,6 +30,7 @@ class DeveloperConfig(BaseConfig):
     CKEDITOR_HEIGHT = 200
     CKEDITOR_WIDTH = 750
     CKEDITOR_PKG_TYPE = 'basic'
+    DEBUG_TB_INTERCEPT_REDIRECTS = False
 
 class ProductConfig(BaseConfig):
     DEBUG = 0
