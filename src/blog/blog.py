@@ -4,7 +4,7 @@ from flask_login import login_required
 
 from datetime import timedelta
 
-from blog.forms import PostAddForm, PostChangeForm
+from blog.forms import PostAddForm, PostChangeForm, CommentAddForm, CommentChangeForm
 from database import models
 from blog import constant
 from log.log import log
@@ -49,13 +49,29 @@ def view_posts(num):
 
     return render_template('blog/view_posts.html', posts=posts, prev_page=prev_page, next_page=next_page, current_page=num)
 
-@blog.route('/<string:title>')
+@blog.route('/<string:title>', methods=['GET', 'POST'])
 def show_post(title):
     """
-    Обработчик страницы просмотра конкретного поста
+    Обработчик страницы просмотра конкретного поста и добавления комментариев
     """
+    form = CommentAddForm()
     post = models.Post.query.filter(models.Post.title == title).first()
-    return render_template('blog/show_post.html', post=post)
+    if request.method == 'POST':
+        # добавления омментария к посут    
+        if form.validate_on_submit():
+            text_comment = form.text.data
+
+            comment = models.Comment(
+                text=text_comment,
+                user_id=current_user.id,
+                post_id=post.id
+            )
+            models.db.session.add(comment)
+            models.db.session.commit()
+
+            return redirect(url_for('.show_post', title=post.title))
+        
+    return render_template('blog/show_post.html', post=post, form=form)
 
 @blog.route('/mypost')
 @login_required
@@ -88,6 +104,22 @@ def change_post(title):
         return redirect(url_for('.my_post'))
     return render_template('blog/change_post.html', form=form, title=title)
 
+@blog.route('commentchange/<string:title>/<string:comment_id>', methods=['GET', 'POST'])
+def change_comment(title, comment_id):
+    comment = models.Comment.query.filter(models.Comment.id == comment_id).first()
+    form = CommentChangeForm(text=comment.text)
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            text = replace_tag_in_text(form.text.data)
+
+            if form.save.data:
+                if text != comment.text:
+                    comment.text = text
+                    models.db.session.commit()
+            return redirect(url_for('.show_post', title=title))
+    return render_template('blog/change_comment.html', form=form)
+
+
 @blog.route('<string:title>/delete')
 @login_required
 def del_post(title):
@@ -95,3 +127,11 @@ def del_post(title):
     models.db.session.delete(post)
     models.db.session.commit()
     return redirect(url_for('.my_post'))
+
+@blog.route('/deletecomment<string:comment_id>/<string:title>')
+def delete_comment(comment_id, title):
+    comment = models.Comment.query.filter(models.Comment.id == comment_id).first()
+    if comment.user.id == current_user.id:
+        models.db.session.delete(comment)
+        models.db.session.commit()
+    return redirect(url_for('.show_post', title=title))

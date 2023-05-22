@@ -39,3 +39,12 @@ class PostChangeForm(FlaskForm):
     text = CKEditorField(label='Change text this post', validators=[Length(min=255)])
     save = SubmitField('Save') 
     cancel = SubmitField('Cancel')
+
+class CommentAddForm(FlaskForm):
+    text = StringField(label='Add Comment', validators=[InputRequired(), Length(min=20, max=300)])
+    submit = SubmitField()
+
+class CommentChangeForm(FlaskForm):
+    text = CKEditorField(validators=[InputRequired(), Length(min=20, max=300)])
+    save = SubmitField()
+    cancel = SubmitField()

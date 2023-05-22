@@ -8,4 +8,3 @@ def replace_tag_in_text(text):
     result = re.sub(r'</\w+?>$', '', result)
     return result
 
-

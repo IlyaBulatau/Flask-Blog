@@ -16,7 +16,7 @@ class User(UserMixin, db.Model):
     posts = db.relationship('Post', backref='user')
     comments = db.relationship('Comment', backref='user')
     
-    def __repr__(self):
+    def __str__(self):
         return f'User: {self.username}, E-mail: {self.email}'
 
 class Post(db.Model):
@@ -29,7 +29,7 @@ class Post(db.Model):
     user_id = db.Column(db.BigInteger(), db.ForeignKey('users.id'))
     comments = db.relationship('Comment', backref='post')
 
-    def __repr__(self):
+    def __str__(self):
         return f'{self.title} from user id {self.user_id}'
     
 
@@ -42,5 +42,5 @@ class Comment(db.Model):
     user_id = db.Column(db.BigInteger(), db.ForeignKey('users.id'))
     post_id = db.Column(db.BigInteger(), db.ForeignKey('posts.id'))
 
-    def __repr__(self):
+    def __str__(self):
         return f'Id Coment {self.id} from user id {self.user_id}, post id {self.post_id}'
