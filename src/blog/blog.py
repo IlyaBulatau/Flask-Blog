@@ -35,6 +35,7 @@ def add_post():
             redis.set(current_user.id, current_user.id, ex=timedelta(days=constant.LIMIT_POST))
             models.db.session.add(post)
             models.db.session.commit()
+            log.info(f'User in id: {post.user_id} add new post - title {post.title}')
             return redirect(url_for('index'))
     return render_template('blog/add_post.html', form=form)
 
@@ -106,6 +107,9 @@ def change_post(title):
 
 @blog.route('commentchange/<string:title>/<string:comment_id>', methods=['GET', 'POST'])
 def change_comment(title, comment_id):
+    """
+    Обработчик изменения комментария
+    """
     comment = models.Comment.query.filter(models.Comment.id == comment_id).first()
     form = CommentChangeForm(text=comment.text)
     if request.method == 'POST':

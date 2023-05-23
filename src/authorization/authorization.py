@@ -28,6 +28,7 @@ def login():
 
             user = models.db.session.query(models.User).filter(models.User.email == email).first()
             login_user(user, remember=remember)
+            log.info(f'User: {user.username} - id: {user.id} LogIn')
             return redirect(url_for('index'))
 
     return render_template('authorization/login.html', form=form)
@@ -52,7 +53,7 @@ def signup():
             
             models.db.session.add(user)
             models.db.session.commit()
-            
+            log.info(f'New User AUTHORIZATION {user.username}')
             return redirect(url_for('.login'))
     return render_template('authorization/signup.html', form=form)
 

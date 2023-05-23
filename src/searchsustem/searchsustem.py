@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for
+from flask_login import current_user
 
 from searchsustem.validater import ValidaterSearchText
 from log.log import log
@@ -20,7 +21,7 @@ def search(num, text=None):
         search_text = text
     else:
         search_text = request.args['text']
-        
+        log.info(f'{current_user.username} search {search_text}')
     seacher = SearchText(search_text)
 
     # если не валидный запрос

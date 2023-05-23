@@ -19,7 +19,7 @@ class BaseConfig:
 
 class DeveloperConfig(BaseConfig):
     DEBUG = 1
-    FLASK_DDEBUG = 1
+    FLASK_DEBUG = 1
     
     SQLALCHEMY_DATABASE_URI = f'postgresql+psycopg2://{BaseConfig.DB_LOGIN}:{BaseConfig.DB_PASSWORD}@localhost/{BaseConfig.DB_NAME}'
     SQLALCHEMY_ECHO = 1
